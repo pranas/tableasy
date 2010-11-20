@@ -11,20 +11,12 @@ formatter(:linked_to) do |cell|
 end
 
 formatter(:tail_link, :header => nil, :initial => false) do |cell, text, *args|
-  html_options = args.extract_options!.clone
-  url = args + [cell.subject]
-
-  cell.value = if html_options.delete(:ajax)
-    options = {:method => html_options.delete(:method), :confirm => html_options.delete(:confirm), :url => url}
-    link_to_remote text, options, html_options
-  else
-    link_to text, url, html_options
-  end
+  html_options = args.extract_options!
+  cell.value = link_to text, args + [cell.subject], html_options
 end
 
 formatter(:edit_link, :initial => false, :header => nil) do |cell, text, options|
   options ||= {}
-  options[:method] = 'get' if options[:ajax]
   tail_link(text, :edit, options).execute(cell)
 end
 
@@ -35,7 +27,8 @@ formatter(:destroy_link, :initial => false, :header => nil) do |cell, text, opti
 end
 
 formatter(:joined_array) do |cell|
-  cell.value = cell.value.join("<br />")
+  values = cell.value.collect { |value| ERB::Util.h value }
+  cell.value = values.join("<br />").html_safe
 end
 
 formatter(:with_percent) do |cell, total_column|

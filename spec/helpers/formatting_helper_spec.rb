@@ -81,8 +81,8 @@ describe 'Formatters' do
     end
 
     it "should allow creating ajax link" do
-      formatter = helper.tail_link('hello', :edit, :ajax => true)
-      Tableasy::Table::Cell.new(@andrius, formatter).value.should == helper.link_to_remote('hello', :url => [:edit, @andrius])
+      formatter = helper.tail_link('hello', :edit, :method => :get, :remote => true)
+      Tableasy::Table::Cell.new(@andrius, formatter).value.should == helper.link_to('hello', [:edit, @andrius], {:method => :get, :remote => true})
     end
 
     it "should allow creating edit url" do
@@ -91,8 +91,8 @@ describe 'Formatters' do
     end
 
     it "should allow creating ajax edit url" do
-      formatter = helper.edit_link('(edit)', :ajax => true)
-      Tableasy::Table::Cell.new(@andrius, formatter).value.should == helper.link_to_remote('(edit)', :url => [:edit, @andrius], :method => :get)
+      formatter = helper.edit_link('(edit)', :method => :get, :remote => true)
+      Tableasy::Table::Cell.new(@andrius, formatter).value.should == helper.link_to('(edit)', [:edit, @andrius], {:method => :get, :remote => true})
     end
 
     it "should allow creating delete link" do
